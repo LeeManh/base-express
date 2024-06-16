@@ -1,7 +1,8 @@
 import express from 'express'
-import usersRoutes from './routes/users.routes'
-import databaseService from './services/database.service'
 import { config } from 'dotenv'
+import databaseService from './services/database.service'
+import authRouter from './routes/auth.routes'
+import usersRouter from './routes/users.routes'
 
 config()
 
@@ -9,13 +10,14 @@ const app = express()
 const port = process.env.PORT || 3000
 
 // Connect to the database
-databaseService.run()
+databaseService.connect()
 
 // Middlewares
 app.use(express.json())
 
 // Routes
-app.use('/users', usersRoutes)
+app.use('users', usersRouter)
+app.use('/auth', authRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

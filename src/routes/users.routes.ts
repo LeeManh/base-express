@@ -1,10 +1,9 @@
 import { Router } from 'express'
-import { loginValidator } from '~/middlewares/auth/login-validator.middleware'
 
-const usersRoutes = Router()
+const usersRouter = Router()
 
-usersRoutes.get('/', loginValidator, (req, res) => {
+usersRouter.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-export default usersRoutes
+export default usersRouter

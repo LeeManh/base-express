@@ -6,6 +6,7 @@ declare global {
       PORT: number
       DB_USERNAME: number
       DB_PASSWORD: string
+      DB_NAME: string
       ENV: 'test' | 'dev' | 'prod'
     }
   }
