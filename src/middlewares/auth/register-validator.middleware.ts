@@ -20,7 +20,18 @@ export const registerValidator = validate(
       email: {
         notEmpty: true,
         isEmail: true,
-        trim: true
+        trim: true,
+        custom: {
+          options: async (value) => {
+            const user = await userServices.findByEmail(value)
+
+            if (user) {
+              throw new Error('Email already exists')
+            }
+
+            return true
+          }
+        }
       },
       password: {
         notEmpty: true,
@@ -30,30 +41,7 @@ export const registerValidator = validate(
             min: 6,
             max: 50
           }
-        },
-        custom: {
-          options: async (value) => {
-            const user = await userServices.findByEmail(value)
-
-            if (!user) {
-              throw new Error('Email already exists')
-            }
-
-            return true
-          }
         }
-
-        // isStrongPassword: {
-        //   options: {
-        //     minLength: 6,
-        //     minLowercase: 1,
-        //     minUppercase: 1,
-        //     minNumbers: 1,
-        //     minSymbols: 1
-        //   },
-        //   errorMessage:
-        //     'Password must be at least 6 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol'
-        // }
       },
       confirm_password: {
         notEmpty: true,
@@ -64,17 +52,6 @@ export const registerValidator = validate(
             max: 50
           }
         },
-        // isStrongPassword: {
-        //   options: {
-        //     minLength: 6,
-        //     minLowercase: 1,
-        //     minUppercase: 1,
-        //     minNumbers: 1,
-        //     minSymbols: 1
-        //   },
-        //   errorMessage:
-        //     'Password must be at least 6 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol'
-        // },
         custom: {
           options: (value, { req }) => {
             if (value !== req.body.password) {
