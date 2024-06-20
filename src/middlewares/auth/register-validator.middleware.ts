@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { checkSchema } from 'express-validator'
 import { HttpStatus } from '~/constants/httpStatus'
+import { USERS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Error'
 import userServices from '~/services/user.services'
 import { validate } from '~/utils/validate'
@@ -28,7 +29,7 @@ export const registerValidator = validate(
             const user = await userServices.findByEmail(value)
 
             if (user) {
-              throw new ErrorWithStatus({ message: 'Email already exists', status: HttpStatus.CONFLICT })
+              throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_EXISTS, status: HttpStatus.CONFLICT })
             }
 
             return true
@@ -57,7 +58,7 @@ export const registerValidator = validate(
         custom: {
           options: (value, { req }) => {
             if (value !== req.body.password) {
-              throw new Error('Password confirmation does not match password')
+              throw new Error(USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD)
             }
             return true
           }

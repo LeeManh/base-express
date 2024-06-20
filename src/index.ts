@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express from 'express'
 import { config } from 'dotenv'
 import databaseService from './services/database.service'
 import authRouter from './routes/auth.routes'
