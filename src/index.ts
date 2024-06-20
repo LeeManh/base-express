@@ -3,6 +3,7 @@ import { config } from 'dotenv'
 import databaseService from './services/database.service'
 import authRouter from './routes/auth.routes'
 import usersRouter from './routes/users.routes'
+import { defaultErrorHandler } from './middlewares/defaultErrorHandler'
 
 config()
 
@@ -20,9 +21,7 @@ app.use('users', usersRouter)
 app.use('/auth', authRouter)
 
 // Error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(500).json({ message: err?.message })
-})
+app.use(defaultErrorHandler)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

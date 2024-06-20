@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { checkSchema } from 'express-validator'
+import { HttpStatus } from '~/constants/httpStatus'
+import { ErrorWithStatus } from '~/models/Error'
 import userServices from '~/services/user.services'
 import { validate } from '~/utils/validate'
 
@@ -26,7 +28,7 @@ export const registerValidator = validate(
             const user = await userServices.findByEmail(value)
 
             if (user) {
-              throw new Error('Email already exists')
+              throw new ErrorWithStatus({ message: 'Email already exists', status: HttpStatus.CONFLICT })
             }
 
             return true
