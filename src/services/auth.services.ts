@@ -6,6 +6,7 @@ import { signToken } from '~/utils/jwt'
 import { ErrorWithStatus } from '~/models/Error'
 import { USERS_MESSAGES } from '~/constants/message'
 import { HttpStatus } from '~/constants/httpStatus'
+import { ObjectId } from 'mongodb'
 export class AuthServices {
   private signAccessToken(user_id: string) {
     return signToken({
@@ -87,6 +88,18 @@ export class AuthServices {
     )
 
     return { access_token, refresh_token }
+  }
+
+  async logout(user_id: string) {
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: { refresh_token: '' },
+        $currentDate: { updated_at: true }
+      }
+    )
   }
 }
 
