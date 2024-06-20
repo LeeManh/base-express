@@ -1,3 +1,6 @@
+import { User } from './models/schemas/User.schema'
+import { Request } from 'express'
+
 export {}
 
 declare global {
@@ -13,5 +16,11 @@ declare global {
       REFRESH_TOKEN_EXPIRES_IN: string
       ENV: 'test' | 'dev' | 'prod'
     }
+  }
+}
+
+declare module 'express' {
+  interface Request {
+    user?: User
   }
 }

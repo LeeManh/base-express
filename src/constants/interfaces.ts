@@ -12,3 +12,8 @@ export interface IBodyRegisterUser {
   confirm_password: string
   date_of_birth: string
 }
+
+export interface IBodyLoginUser {
+  email: string
+  password: string
+}

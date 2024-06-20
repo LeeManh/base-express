@@ -37,13 +37,19 @@ export const registerValidator = validate(
         }
       },
       password: {
-        notEmpty: true,
-        isString: true,
+        trim: true,
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.PASSWORD_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_A_STRING
+        },
         isLength: {
           options: {
             min: 6,
             max: 50
-          }
+          },
+          errorMessage: USERS_MESSAGES.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
         }
       },
       confirm_password: {

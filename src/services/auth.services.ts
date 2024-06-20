@@ -1,8 +1,11 @@
 import { User } from '~/models/schemas/User.schema'
-import { IBodyRegisterUser } from './../constants/interfaces'
+import { IBodyLoginUser, IBodyRegisterUser } from './../constants/interfaces'
 import databaseService from './database.service'
-import { hashPassword } from '~/utils/password'
+import { comparePassword, hashPassword } from '~/utils/password'
 import { signToken } from '~/utils/jwt'
+import { ErrorWithStatus } from '~/models/Error'
+import { USERS_MESSAGES } from '~/constants/message'
+import { HttpStatus } from '~/constants/httpStatus'
 export class AuthServices {
   private signAccessToken(user_id: string) {
     return signToken({
@@ -20,6 +23,15 @@ export class AuthServices {
     })
   }
 
+  public async signTokens(user_id: string) {
+    const [access_token, refresh_token] = await Promise.all([
+      this.signAccessToken(user_id),
+      this.signRefreshToken(user_id)
+    ])
+
+    return { access_token, refresh_token }
+  }
+
   public async register(body: IBodyRegisterUser) {
     const user = await databaseService.users.insertOne(
       new User({
@@ -32,15 +44,41 @@ export class AuthServices {
     const user_id = user.insertedId.toString()
 
     // create tokens
-    const [access_token, refresh_token] = await Promise.all([
-      this.signAccessToken(user_id),
-      this.signRefreshToken(user_id)
-    ])
+    const { access_token, refresh_token } = await this.signTokens(user_id)
 
     // save refresh token to database
     await databaseService.users.updateOne(
       {
         _id: user.insertedId
+      },
+      {
+        $set: { refresh_token },
+        $currentDate: { updated_at: true }
+      }
+    )
+
+    return { access_token, refresh_token }
+  }
+
+  public async login(body: IBodyLoginUser) {
+    const user = await databaseService.users.findOne({ email: body.email })
+    if (!user) {
+      throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_NOT_REGISTER, status: HttpStatus.UNAUTHORIZED })
+    }
+
+    // compare password
+    const isValidPassword = await comparePassword(body.password, user.password)
+    if (!isValidPassword) {
+      throw new ErrorWithStatus({ message: USERS_MESSAGES.PASSWORD_IS_INCORRECT, status: HttpStatus.UNAUTHORIZED })
+    }
+
+    // create tokens
+    const { access_token, refresh_token } = await this.signTokens(user._id.toString())
+
+    // save refresh token to database
+    await databaseService.users.updateOne(
+      {
+        _id: user._id
       },
       {
         $set: { refresh_token },

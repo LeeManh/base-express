@@ -11,6 +11,7 @@ interface IUser {
   updated_at?: Date
   email_verify_token?: string
   forgot_password_token?: string
+  refresh_token?: string
   verify?: UserVerifyStatus
 
   bio?: string
@@ -31,6 +32,7 @@ export class User {
   updated_at: Date
   email_verify_token: string // jwt hoặc '' nếu đã xác thực email
   forgot_password_token: string // jwt hoặc '' nếu đã xác thực email
+  refresh_token?: string // jwt
   verify: UserVerifyStatus
 
   bio: string // optional
@@ -51,6 +53,7 @@ export class User {
     this.updated_at = user.updated_at || date
     this.email_verify_token = user.email_verify_token || ''
     this.forgot_password_token = user.forgot_password_token || ''
+    this.refresh_token = user.refresh_token || ''
     this.verify = user.verify || UserVerifyStatus.Unverified
     this.bio = user.bio || ''
     this.location = user.location || ''
