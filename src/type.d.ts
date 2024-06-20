@@ -1,4 +1,4 @@
-import { User } from './models/schemas/User.schema'
+import { TokenPayload } from './constants/interfaces'
 import { Request } from 'express'
 
 export {}
@@ -21,6 +21,6 @@ declare global {
 
 declare module 'express' {
   interface Request {
-    user?: User
+    decoded_authorization?: TokenPayload
   }
 }

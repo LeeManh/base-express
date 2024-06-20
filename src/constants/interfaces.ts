@@ -1,6 +1,10 @@
 import { ParamsDictionary } from 'express-serve-static-core'
 import { Request } from 'express'
 
+export interface TokenPayload {
+  user_id: string
+}
+
 /* --------------------------------- Express -------------------------------- */
 export type RequestBody<T> = Request<ParamsDictionary, any, T>
 
