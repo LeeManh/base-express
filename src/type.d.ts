@@ -1,5 +1,6 @@
 import { TokenPayload } from './constants/interfaces'
 import { Request } from 'express'
+import { User } from './models/schemas/User.schema'
 
 export {}
 
@@ -16,6 +17,8 @@ declare global {
       REFRESH_TOKEN_EXPIRES_IN: string
       EMAIL_VERIFICATION_SECRET: string
       EMAIL_VERIFICATION_EXPIRES_IN: string
+      FORGOT_PASSWORD_SECRET: string
+      FORGOT_PASSWORD_EXPIRES_IN: string
       ENV: 'test' | 'dev' | 'prod'
     }
   }
@@ -25,5 +28,6 @@ declare module 'express' {
   interface Request {
     decoded_authorization?: TokenPayload
     decoded_email_verification?: TokenPayload
+    user?: User
   }
 }

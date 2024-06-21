@@ -54,3 +54,11 @@ export const resendVerifyEmailController = async (req: RequestBody<any>, res: Re
     message: 'Resend verify email success'
   })
 }
+
+export const forgotPasswordController = async (req: RequestBody<any>, res: Response) => {
+  await authServices.forgotPassword(req.user?._id?.toString() as string)
+
+  return res.status(HttpStatus.OK).json({
+    message: 'Check your email to reset password'
+  })
+}

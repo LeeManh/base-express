@@ -23,5 +23,6 @@ export const USERS_MESSAGES = {
   ACCESS_TOKEN_IS_REQUIRED: 'Access token is required',
   EMAIL_VERIFICATION_TOKEN_IS_REQUIRED: 'Email verification token is required',
   USER_NOT_FOUND: 'User not found',
-  EMAIL_ALREADY_VERIFIED: 'Email already verified'
+  EMAIL_ALREADY_VERIFIED: 'Email already verified',
+  EMAIL_NOT_FOUND: 'Email not found'
 } as const

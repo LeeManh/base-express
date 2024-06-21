@@ -34,6 +34,14 @@ export class AuthServices {
     })
   }
 
+  private signForgotPasswordToken(user_id: string) {
+    return signToken({
+      payload: { user_id },
+      secretOrPrivateKey: process.env.FORGOT_PASSWORD_SECRET,
+      options: { expiresIn: process.env.FORGOT_PASSWORD_EXPIRES_IN }
+    })
+  }
+
   public async signTokens(user_id: string) {
     const [access_token, refresh_token] = await Promise.all([
       this.signAccessToken(user_id),
@@ -147,6 +155,22 @@ export class AuthServices {
       },
       {
         $set: { email_verify_token },
+        $currentDate: { updated_at: true }
+      }
+    )
+  }
+
+  async forgotPassword(user_id: string) {
+    // create forgot password token
+    const forgot_password_token = await this.signForgotPasswordToken(user_id)
+
+    // update user
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: { forgot_password_token },
         $currentDate: { updated_at: true }
       }
     )
