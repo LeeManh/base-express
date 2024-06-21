@@ -7,6 +7,8 @@ import { ErrorWithStatus } from '~/models/Error'
 import { USERS_MESSAGES } from '~/constants/message'
 import { HttpStatus } from '~/constants/httpStatus'
 import { ObjectId } from 'mongodb'
+import userServices from './user.services'
+import { UserVerifyStatus } from '~/constants/enum'
 export class AuthServices {
   private signAccessToken(user_id: string) {
     return signToken({
@@ -24,33 +26,24 @@ export class AuthServices {
     })
   }
 
+  private signEmailVerificationToken(user_id: string) {
+    return signToken({
+      payload: { user_id },
+      secretOrPrivateKey: process.env.EMAIL_VERIFICATION_SECRET,
+      options: { expiresIn: process.env.EMAIL_VERIFICATION_EXPIRES_IN }
+    })
+  }
+
   public async signTokens(user_id: string) {
     const [access_token, refresh_token] = await Promise.all([
       this.signAccessToken(user_id),
       this.signRefreshToken(user_id)
     ])
 
-    return { access_token, refresh_token }
-  }
-
-  public async register(body: IBodyRegisterUser) {
-    const user = await databaseService.users.insertOne(
-      new User({
-        ...body,
-        date_of_birth: new Date(body.date_of_birth),
-        password: await hashPassword(body.password)
-      })
-    )
-
-    const user_id = user.insertedId.toString()
-
-    // create tokens
-    const { access_token, refresh_token } = await this.signTokens(user_id)
-
     // save refresh token to database
     await databaseService.users.updateOne(
       {
-        _id: user.insertedId
+        _id: new ObjectId(user_id)
       },
       {
         $set: { refresh_token },
@@ -61,8 +54,29 @@ export class AuthServices {
     return { access_token, refresh_token }
   }
 
+  public async register(body: IBodyRegisterUser) {
+    const user_id = new ObjectId()
+
+    const email_verify_token = await this.signEmailVerificationToken(user_id.toString())
+
+    await databaseService.users.insertOne(
+      new User({
+        ...body,
+        _id: user_id,
+        email_verify_token,
+        date_of_birth: new Date(body.date_of_birth),
+        password: await hashPassword(body.password)
+      })
+    )
+
+    // create tokens
+    const { access_token, refresh_token } = await this.signTokens(user_id.toString())
+
+    return { access_token, refresh_token }
+  }
+
   public async login(body: IBodyLoginUser) {
-    const user = await databaseService.users.findOne({ email: body.email })
+    const user = await userServices.findByEmail(body.email)
     if (!user) {
       throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_NOT_REGISTER, status: HttpStatus.UNAUTHORIZED })
     }
@@ -75,17 +89,6 @@ export class AuthServices {
 
     // create tokens
     const { access_token, refresh_token } = await this.signTokens(user._id.toString())
-
-    // save refresh token to database
-    await databaseService.users.updateOne(
-      {
-        _id: user._id
-      },
-      {
-        $set: { refresh_token },
-        $currentDate: { updated_at: true }
-      }
-    )
 
     return { access_token, refresh_token }
   }
@@ -100,6 +103,30 @@ export class AuthServices {
         $currentDate: { updated_at: true }
       }
     )
+  }
+
+  async verifyEmail(user_id: string) {
+    const user = await userServices.findById(user_id)
+
+    // check if email is already verified
+    if (!user.email_verify_token) {
+      throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_VERIFIED, status: HttpStatus.BAD_REQUEST })
+    }
+
+    // update user
+    await databaseService.users.updateOne(
+      {
+        _id: user._id
+      },
+      {
+        $set: { email_verify_token: '', verify: UserVerifyStatus.Verified },
+        $currentDate: { updated_at: true }
+      }
+    )
+
+    const { access_token, refresh_token } = await this.signTokens(user_id)
+
+    return { access_token, refresh_token }
   }
 }
 

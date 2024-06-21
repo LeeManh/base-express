@@ -14,6 +14,8 @@ declare global {
       ACCESS_TOKEN_EXPIRES_IN: string
       REFRESH_TOKEN_SECRET: string
       REFRESH_TOKEN_EXPIRES_IN: string
+      EMAIL_VERIFICATION_SECRET: string
+      EMAIL_VERIFICATION_EXPIRES_IN: string
       ENV: 'test' | 'dev' | 'prod'
     }
   }
@@ -22,5 +24,6 @@ declare global {
 declare module 'express' {
   interface Request {
     decoded_authorization?: TokenPayload
+    decoded_email_verification?: TokenPayload
   }
 }

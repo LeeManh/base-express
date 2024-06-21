@@ -33,3 +33,14 @@ export const logoutController = async (req: RequestBody<any>, res: Response) => 
     message: 'Logout success'
   })
 }
+
+export const verifyEmailController = async (req: RequestBody<any>, res: Response) => {
+  const decoded_email_verification = req.decoded_email_verification as TokenPayload
+
+  const data = await authServices.verifyEmail(decoded_email_verification.user_id)
+
+  return res.status(HttpStatus.OK).json({
+    message: 'Verify email success',
+    data
+  })
+}
