@@ -128,6 +128,29 @@ export class AuthServices {
 
     return { access_token, refresh_token }
   }
+
+  async resendVerifyEmail(user_id: string) {
+    const user = await userServices.findById(user_id)
+
+    // check if email is already verified
+    if (user.verify === UserVerifyStatus.Verified) {
+      throw new ErrorWithStatus({ message: USERS_MESSAGES.EMAIL_ALREADY_VERIFIED, status: HttpStatus.BAD_REQUEST })
+    }
+
+    // create new email verification token
+    const email_verify_token = await this.signEmailVerificationToken(user_id)
+
+    // update user
+    await databaseService.users.updateOne(
+      {
+        _id: user._id
+      },
+      {
+        $set: { email_verify_token },
+        $currentDate: { updated_at: true }
+      }
+    )
+  }
 }
 
 const authServices = new AuthServices()

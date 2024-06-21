@@ -44,3 +44,13 @@ export const verifyEmailController = async (req: RequestBody<any>, res: Response
     data
   })
 }
+
+export const resendVerifyEmailController = async (req: RequestBody<any>, res: Response) => {
+  const decoded_authorization = req.decoded_authorization as TokenPayload
+
+  await authServices.resendVerifyEmail(decoded_authorization.user_id)
+
+  return res.status(HttpStatus.OK).json({
+    message: 'Resend verify email success'
+  })
+}

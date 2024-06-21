@@ -3,6 +3,7 @@ import {
   loginController,
   logoutController,
   registerController,
+  resendVerifyEmailController,
   verifyEmailController
 } from '~/controllers/auth.controllers'
 import { accessTokenValidator } from '~/middlewares/auth/access-token-validator.middleware'
@@ -17,5 +18,6 @@ authRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 authRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 authRouter.post('/logout', accessTokenValidator, wrapRequestHandler(logoutController))
 authRouter.post('/verify-email', verifyEmailValidator, wrapRequestHandler(verifyEmailController))
+authRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
 
 export default authRouter
