@@ -1,8 +1,10 @@
 import { ParamsDictionary } from 'express-serve-static-core'
 import { Request } from 'express'
+import { UserVerifyStatus } from './enum'
 
 export interface TokenPayload {
   user_id: string
+  verify: UserVerifyStatus
 }
 
 export type RequestBody<T> = Request<ParamsDictionary, any, T>

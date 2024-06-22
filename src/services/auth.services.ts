@@ -1,3 +1,4 @@
+import { UserVerifyStatus } from './../constants/enum'
 import { User } from '~/models/schemas/User.schema'
 import { IBodyLoginUser, IBodyRegisterUser, IBodyResetPassword } from './../constants/interfaces'
 import databaseService from './database.service'
@@ -8,17 +9,17 @@ import { USERS_MESSAGES } from '~/constants/message'
 import { HttpStatus } from '~/constants/httpStatus'
 import { ObjectId } from 'mongodb'
 import userServices from './user.services'
-import { UserVerifyStatus } from '~/constants/enum'
+
 export class AuthServices {
-  private signAccessToken(user_id: string) {
+  private signAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
-      payload: { user_id },
+      payload: { user_id, verify },
       secretOrPrivateKey: process.env.ACCESS_TOKEN_SECRET,
       options: { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN }
     })
   }
 
-  private signRefreshToken(user_id: string) {
+  private signRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
       payload: { user_id },
       secretOrPrivateKey: process.env.REFRESH_TOKEN_SECRET,
@@ -26,7 +27,7 @@ export class AuthServices {
     })
   }
 
-  private signEmailVerificationToken(user_id: string) {
+  private signEmailVerificationToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
       payload: { user_id },
       secretOrPrivateKey: process.env.EMAIL_VERIFICATION_SECRET,
@@ -34,7 +35,7 @@ export class AuthServices {
     })
   }
 
-  private signForgotPasswordToken(user_id: string) {
+  private signForgotPasswordToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
       payload: { user_id },
       secretOrPrivateKey: process.env.FORGOT_PASSWORD_SECRET,
@@ -42,10 +43,10 @@ export class AuthServices {
     })
   }
 
-  public async signTokens(user_id: string) {
+  public async signTokens({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     const [access_token, refresh_token] = await Promise.all([
-      this.signAccessToken(user_id),
-      this.signRefreshToken(user_id)
+      this.signAccessToken({ user_id, verify }),
+      this.signRefreshToken({ user_id, verify })
     ])
 
     // save refresh token to database
@@ -65,7 +66,10 @@ export class AuthServices {
   public async register(body: IBodyRegisterUser) {
     const user_id = new ObjectId()
 
-    const email_verify_token = await this.signEmailVerificationToken(user_id.toString())
+    const email_verify_token = await this.signEmailVerificationToken({
+      user_id: user_id.toString(),
+      verify: UserVerifyStatus.Unverified
+    })
 
     await databaseService.users.insertOne(
       new User({
@@ -78,7 +82,10 @@ export class AuthServices {
     )
 
     // create tokens
-    const { access_token, refresh_token } = await this.signTokens(user_id.toString())
+    const { access_token, refresh_token } = await this.signTokens({
+      user_id: user_id.toString(),
+      verify: UserVerifyStatus.Unverified
+    })
 
     return { access_token, refresh_token }
   }
@@ -96,7 +103,10 @@ export class AuthServices {
     }
 
     // create tokens
-    const { access_token, refresh_token } = await this.signTokens(user._id.toString())
+    const { access_token, refresh_token } = await this.signTokens({
+      user_id: user._id.toString(),
+      verify: user.verify
+    })
 
     return { access_token, refresh_token }
   }
@@ -132,7 +142,10 @@ export class AuthServices {
       }
     )
 
-    const { access_token, refresh_token } = await this.signTokens(user_id)
+    const { access_token, refresh_token } = await this.signTokens({
+      user_id: user._id.toString(),
+      verify: UserVerifyStatus.Verified
+    })
 
     return { access_token, refresh_token }
   }
@@ -146,7 +159,10 @@ export class AuthServices {
     }
 
     // create new email verification token
-    const email_verify_token = await this.signEmailVerificationToken(user_id)
+    const email_verify_token = await this.signEmailVerificationToken({
+      user_id: user._id.toString(),
+      verify: user.verify
+    })
 
     // update user
     await databaseService.users.updateOne(
@@ -161,8 +177,13 @@ export class AuthServices {
   }
 
   async forgotPassword(user_id: string) {
+    const user = await userServices.findById(user_id)
+
     // create forgot password token
-    const forgot_password_token = await this.signForgotPasswordToken(user_id)
+    const forgot_password_token = await this.signForgotPasswordToken({
+      user_id: user_id.toString(),
+      verify: user.verify
+    })
 
     // update user
     await databaseService.users.updateOne(
