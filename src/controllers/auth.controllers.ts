@@ -62,3 +62,14 @@ export const forgotPasswordController = async (req: RequestBody<any>, res: Respo
     message: 'Check your email to reset password'
   })
 }
+
+export const resetPasswordController = async (req: RequestBody<any>, res: Response) => {
+  await authServices.resetPassword({
+    user_id: req.decoded_forgot_password_token?.user_id as string,
+    password: req.body.password
+  })
+
+  return res.status(HttpStatus.OK).json({
+    message: 'Reset password success'
+  })
+}

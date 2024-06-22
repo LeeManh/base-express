@@ -1,5 +1,5 @@
 import { User } from '~/models/schemas/User.schema'
-import { IBodyLoginUser, IBodyRegisterUser } from './../constants/interfaces'
+import { IBodyLoginUser, IBodyRegisterUser, IBodyResetPassword } from './../constants/interfaces'
 import databaseService from './database.service'
 import { comparePassword, hashPassword } from '~/utils/password'
 import { signToken } from '~/utils/jwt'
@@ -171,6 +171,18 @@ export class AuthServices {
       },
       {
         $set: { forgot_password_token },
+        $currentDate: { updated_at: true }
+      }
+    )
+  }
+
+  async resetPassword({ user_id, password }: IBodyResetPassword) {
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: { password: await hashPassword(password), forgot_password_token: '' },
         $currentDate: { updated_at: true }
       }
     )

@@ -28,6 +28,7 @@ declare module 'express' {
   interface Request {
     decoded_authorization?: TokenPayload
     decoded_email_verification?: TokenPayload
+    decoded_forgot_password_token?: TokenPayload
     user?: User
   }
 }

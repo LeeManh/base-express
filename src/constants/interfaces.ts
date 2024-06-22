@@ -5,10 +5,8 @@ export interface TokenPayload {
   user_id: string
 }
 
-/* --------------------------------- Express -------------------------------- */
 export type RequestBody<T> = Request<ParamsDictionary, any, T>
 
-/* ---------------------------------- Auth ---------------------------------- */
 export interface IBodyRegisterUser {
   name: string
   email: string
@@ -20,4 +18,9 @@ export interface IBodyRegisterUser {
 export interface IBodyLoginUser {
   email: string
   password: string
+}
+
+export interface IBodyResetPassword {
+  password: string
+  user_id: string
 }
