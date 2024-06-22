@@ -3,6 +3,7 @@ import databaseService from './database.service'
 import { ErrorWithStatus } from '~/models/Error'
 import { USERS_MESSAGES } from '~/constants/message'
 import { HttpStatus } from '~/constants/httpStatus'
+import { IBodyUpdateUser } from '~/constants/interfaces'
 
 class UserServices {
   async findByEmail(email: string) {
@@ -35,6 +36,22 @@ class UserServices {
           refresh_token: 0,
           created_at: 0,
           updated_at: 0
+        }
+      }
+    )
+  }
+
+  async updateMe(user_id: string, data: IBodyUpdateUser) {
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          ...(data as any)
+        },
+        $currentDate: {
+          updated_at: true
         }
       }
     )

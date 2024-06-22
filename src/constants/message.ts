@@ -24,5 +24,18 @@ export const USERS_MESSAGES = {
   EMAIL_VERIFICATION_TOKEN_IS_REQUIRED: 'Email verification token is required',
   USER_NOT_FOUND: 'User not found',
   EMAIL_ALREADY_VERIFIED: 'Email already verified',
-  EMAIL_NOT_FOUND: 'Email not found'
+  EMAIL_NOT_FOUND: 'Email not found',
+  USER_NOT_VERIFIED: 'User not verified',
+  USER_BANNED: 'User banned',
+  DATE_OF_BIRTH_MUST_BE_A_DATE: 'Date of birth must be a date',
+  BIO_MUST_BE_STRING: 'Bio must be a string',
+  BIO_LENGTH: 'Bio length must be from 1 to 200',
+  LOCATION_MUST_BE_STRING: 'Location must be a string',
+  LOCATION_LENGTH: 'Location length must be from 1 to 200',
+  WEBSITE_MUST_BE_STRING: 'Website must be a string',
+  WEBSITE_LENGTH: 'Website length must be from 1 to 200',
+  USERNAME_MUST_BE_STRING: 'User name must be a string',
+  USERNAME_LENGTH: 'User name length must be from 1 to 50',
+  IMAGE_URL_MUST_BE_STRING: 'Image URL must be a string',
+  IMAGE_URL_LENGTH: 'Image URL length must be from 1 to 400'
 } as const

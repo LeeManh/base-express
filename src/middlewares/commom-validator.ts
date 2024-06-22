@@ -1,5 +1,21 @@
-import { Request } from 'express'
 import { USERS_MESSAGES } from '~/constants/message'
+
+const nameValidator = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED
+  },
+  isString: {
+    errorMessage: USERS_MESSAGES.NAME_MUST_BE_A_STRING
+  },
+  isLength: {
+    options: {
+      min: 1,
+      max: 100
+    },
+    errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+  },
+  trim: true
+}
 
 const passwordValidator = {
   trim: true,
@@ -37,4 +53,95 @@ const confirmPasswordValidator = {
   }
 }
 
-export { passwordValidator, confirmPasswordValidator }
+const dateOfBirthValidator = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: USERS_MESSAGES.DATE_OF_BIRTH_MUST_BE_A_DATE
+  }
+}
+
+const bioValidator = {
+  isString: {
+    errorMessage: USERS_MESSAGES.BIO_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 1,
+      max: 200
+    },
+    errorMessage: USERS_MESSAGES.BIO_LENGTH
+  }
+}
+
+const locationValidator = {
+  isString: {
+    errorMessage: USERS_MESSAGES.LOCATION_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 1,
+      max: 200
+    },
+    errorMessage: USERS_MESSAGES.LOCATION_LENGTH
+  }
+}
+
+const websiteValidator = {
+  isString: {
+    errorMessage: USERS_MESSAGES.WEBSITE_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 1,
+      max: 200
+    },
+    errorMessage: USERS_MESSAGES.WEBSITE_LENGTH
+  }
+}
+
+const userNameValidator = {
+  isString: {
+    errorMessage: USERS_MESSAGES.USERNAME_MUST_BE_STRING
+  },
+  trim: true,
+
+  isLength: {
+    options: {
+      min: 1,
+      max: 50
+    },
+    errorMessage: USERS_MESSAGES.USERNAME_LENGTH
+  }
+}
+
+const imageValidator = {
+  isString: {
+    errorMessage: USERS_MESSAGES.IMAGE_URL_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 1,
+      max: 400
+    },
+    errorMessage: USERS_MESSAGES.IMAGE_URL_LENGTH
+  }
+}
+
+export {
+  passwordValidator,
+  confirmPasswordValidator,
+  nameValidator,
+  dateOfBirthValidator,
+  bioValidator,
+  locationValidator,
+  websiteValidator,
+  userNameValidator,
+  imageValidator
+}

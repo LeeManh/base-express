@@ -26,3 +26,14 @@ export interface IBodyResetPassword {
   password: string
   user_id: string
 }
+
+export interface IBodyUpdateUser {
+  name?: string
+  date_of_birth?: string
+  bio?: string
+  location?: string
+  website?: string
+  username?: string
+  avatar?: string
+  cover_photo?: string
+}

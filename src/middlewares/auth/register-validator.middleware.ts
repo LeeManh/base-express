@@ -5,22 +5,12 @@ import { USERS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Error'
 import userServices from '~/services/user.services'
 import { validate } from '~/utils/validate'
-import { confirmPasswordValidator, passwordValidator } from '../commom-validator'
+import { confirmPasswordValidator, dateOfBirthValidator, nameValidator, passwordValidator } from '../commom-validator'
 
 export const registerValidator = validate(
   checkSchema(
     {
-      name: {
-        notEmpty: true,
-        isString: true,
-        isLength: {
-          options: {
-            min: 1,
-            max: 100
-          }
-        },
-        trim: true
-      },
+      name: nameValidator,
       email: {
         notEmpty: true,
         isEmail: true,
@@ -39,14 +29,7 @@ export const registerValidator = validate(
       },
       password: passwordValidator,
       confirm_password: confirmPasswordValidator,
-      date_of_birth: {
-        isISO8601: {
-          options: {
-            strict: true,
-            strictSeparator: true
-          }
-        }
-      }
+      date_of_birth: dateOfBirthValidator
     },
     ['body']
   )
