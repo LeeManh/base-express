@@ -8,7 +8,7 @@ import { ErrorWithStatus } from '~/models/Error'
 export const verifiedUserValidator = (req: Request, res: Response, next: NextFunction) => {
   const { verify } = req.decoded_authorization as TokenPayload
 
-  if (verify === UserVerifyStatus.Verified) {
+  if (verify === UserVerifyStatus.Unverified) {
     throw new ErrorWithStatus({
       message: USERS_MESSAGES.USER_NOT_VERIFIED,
       status: HttpStatus.FORBIDDEN

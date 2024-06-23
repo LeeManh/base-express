@@ -3,8 +3,9 @@ import databaseService from './database.service'
 import { ErrorWithStatus } from '~/models/Error'
 import { USERS_MESSAGES } from '~/constants/message'
 import { HttpStatus } from '~/constants/httpStatus'
-import { IBodyUpdateUser } from '~/constants/interfaces'
+import { IBodyChangePassword, IBodyUpdateUser } from '~/constants/interfaces'
 import { projectionUser } from '~/constants/projections'
+import { hashPassword } from '~/utils/password'
 
 class UserServices {
   async findByEmail(email: string) {
@@ -106,6 +107,24 @@ class UserServices {
       user_id: new ObjectId(user_id),
       followed_user_id: new ObjectId(followed_user_id)
     })
+  }
+
+  async changePassword(user_id: string, data: IBodyChangePassword) {
+    const hashedPassword = await hashPassword(data.password)
+
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          password: hashedPassword
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
   }
 }
 

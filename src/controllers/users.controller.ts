@@ -1,6 +1,12 @@
 import { Response } from 'express'
 import { HttpStatus } from '~/constants/httpStatus'
-import { IBodyFollowUser, IBodyUpdateUser, RequestData, TokenPayload } from '~/constants/interfaces'
+import {
+  IBodyChangePassword,
+  IBodyFollowUser,
+  IBodyUpdateUser,
+  RequestData,
+  TokenPayload
+} from '~/constants/interfaces'
 import userServices from '~/services/user.services'
 
 export const getMe = async (req: RequestData<any>, res: Response) => {
@@ -54,5 +60,15 @@ export const unFollowUser = async (req: RequestData<{ followed_user_id: string }
 
   return res.status(HttpStatus.OK).json({
     message: 'Unfollow user successfully'
+  })
+}
+
+export const changePassword = async (req: RequestData<any, IBodyChangePassword>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+
+  await userServices.changePassword(user_id, req.body)
+
+  return res.status(HttpStatus.OK).json({
+    message: 'Change password successfully'
   })
 }

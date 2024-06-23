@@ -41,3 +41,9 @@ export interface IBodyUpdateUser {
 export interface IBodyFollowUser {
   followed_user_id: string
 }
+
+export interface IBodyChangePassword {
+  old_password: string
+  password: string
+  confirm_password: string
+}

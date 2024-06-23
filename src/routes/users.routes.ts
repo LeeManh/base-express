@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { followUser, getMe, getProfile, unFollowUser, updateMe } from '~/controllers/users.controller'
+import { changePassword, followUser, getMe, getProfile, unFollowUser, updateMe } from '~/controllers/users.controller'
 import { accessTokenValidator } from '~/middlewares/auth/accessTokenValidator'
 import { verifiedUserValidator } from '~/middlewares/users/verifiedUserValidator'
 import { updateMeValidator } from '~/middlewares/users/updateMeValidator'
@@ -8,6 +8,7 @@ import { IBodyFollowUser, IBodyUpdateUser } from '~/constants/interfaces'
 import { filterMiddleware } from '~/middlewares/filterMiddleware'
 import { followValidator } from '~/middlewares/users/followValidator'
 import { unFollowValidator } from '~/middlewares/users/unfollowValidator'
+import { changePasswordValidator } from '~/middlewares/users/changePasswordValidator'
 
 const usersRouter = Router()
 
@@ -44,6 +45,13 @@ usersRouter.delete(
   verifiedUserValidator,
   unFollowValidator,
   wrapRequestHandler(unFollowUser)
+)
+usersRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  verifiedUserValidator,
+  changePasswordValidator,
+  wrapRequestHandler(changePassword)
 )
 
 export default usersRouter
