@@ -37,3 +37,7 @@ export interface IBodyUpdateUser {
   avatar?: string
   cover_photo?: string
 }
+
+export interface IBodyFollowUser {
+  followed_user_id: string
+}

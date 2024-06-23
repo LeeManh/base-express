@@ -1,11 +1,12 @@
 import { Router } from 'express'
-import { getMe, getProfile, updateMe } from '~/controllers/users.controller'
+import { followUser, getMe, getProfile, updateMe } from '~/controllers/users.controller'
 import { accessTokenValidator } from '~/middlewares/auth/accessTokenValidator'
-import { verifiedUserValidator } from '~/middlewares/auth/verifiedUserValidator'
+import { verifiedUserValidator } from '~/middlewares/users/verifiedUserValidator'
 import { updateMeValidator } from '~/middlewares/users/updateMeValidator'
 import { wrapRequestHandler } from '~/middlewares/errors/wrapRequestHandler'
-import { IBodyUpdateUser } from '~/constants/interfaces'
+import { IBodyFollowUser, IBodyUpdateUser } from '~/constants/interfaces'
 import { filterMiddleware } from '~/middlewares/filterMiddleware'
+import { followValidator } from '~/middlewares/users/followValidator'
 
 const usersRouter = Router()
 
@@ -14,6 +15,7 @@ usersRouter.patch(
   '/me',
   accessTokenValidator,
   verifiedUserValidator,
+  updateMeValidator,
   filterMiddleware<IBodyUpdateUser>([
     'name',
     'avatar',
@@ -24,9 +26,16 @@ usersRouter.patch(
     'username',
     'website'
   ]),
-  updateMeValidator,
   wrapRequestHandler(updateMe)
 )
 usersRouter.get('/:username', wrapRequestHandler(getProfile))
+usersRouter.post(
+  '/follow',
+  accessTokenValidator,
+  verifiedUserValidator,
+  followValidator,
+  filterMiddleware<IBodyFollowUser>(['followed_user_id']),
+  wrapRequestHandler(followUser)
+)
 
 export default usersRouter

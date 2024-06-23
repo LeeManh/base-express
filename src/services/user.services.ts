@@ -68,6 +68,26 @@ class UserServices {
 
     return user
   }
+
+  async followUser(user_id: string, followed_user_id: string) {
+    const follow = await databaseService.followers.findOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+
+    if (follow) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_ALREADY_FOLLOWED,
+        status: HttpStatus.BAD_REQUEST
+      })
+    }
+
+    await databaseService.followers.insertOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id),
+      created_at: new Date()
+    })
+  }
 }
 
 const userServices = new UserServices()

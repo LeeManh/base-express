@@ -37,5 +37,9 @@ export const USERS_MESSAGES = {
   USERNAME_MUST_BE_STRING: 'User name must be a string',
   USERNAME_LENGTH: 'User name length must be from 1 to 50',
   IMAGE_URL_MUST_BE_STRING: 'Image URL must be a string',
-  IMAGE_URL_LENGTH: 'Image URL length must be from 1 to 400'
+  IMAGE_URL_LENGTH: 'Image URL length must be from 1 to 400',
+  INVALID_USER_ID: 'Invalid user ID',
+  USER_ALREADY_FOLLOWED: 'User already followed',
+  FOLLOW_USER_ID_IS_REQUIRED: 'followed_user_id is required',
+  CANNOT_FOLLOW_YOURSELF: 'Cannot follow yourself'
 } as const
