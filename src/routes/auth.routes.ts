@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   forgotPasswordController,
   loginController,
+  loginGoogleController,
   logoutController,
   registerController,
   resendVerifyEmailController,
@@ -26,5 +27,6 @@ authRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler
 
 authRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
 authRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
+authRouter.get('/oauth/google', wrapRequestHandler(loginGoogleController))
 
 export default authRouter

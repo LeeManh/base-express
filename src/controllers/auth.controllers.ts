@@ -73,3 +73,13 @@ export const resetPasswordController = async (req: RequestData<any>, res: Respon
     message: 'Reset password success'
   })
 }
+
+export const loginGoogleController = async (req: RequestData<any>, res: Response) => {
+  const { code } = req.query
+
+  const { access_token, refresh_token, verify } = await authServices.loginGoogle(code as string)
+
+  const urlRedirect = `${process.env.CLIENT_REDIRECT_CALLBACK}?access_token=${access_token}&refresh_token=${refresh_token}&verify=${verify}`
+
+  return res.redirect(urlRedirect)
+}

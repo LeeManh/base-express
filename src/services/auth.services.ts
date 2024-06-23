@@ -1,6 +1,12 @@
 import { UserVerifyStatus } from './../constants/enum'
 import { User } from '~/models/schemas/User.schema'
-import { IBodyLoginUser, IBodyRegisterUser, IBodyResetPassword } from './../constants/interfaces'
+import {
+  IBodyLoginUser,
+  IBodyRegisterUser,
+  IBodyResetPassword,
+  IGoogleProfile,
+  IResOauthGoogleToken
+} from './../constants/interfaces'
 import databaseService from './database.service'
 import { comparePassword, hashPassword } from '~/utils/password'
 import { signToken } from '~/utils/jwt'
@@ -9,6 +15,7 @@ import { USERS_MESSAGES } from '~/constants/message'
 import { HttpStatus } from '~/constants/httpStatus'
 import { ObjectId } from 'mongodb'
 import userServices from './user.services'
+import axios from 'axios'
 
 export class AuthServices {
   private signAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -207,6 +214,74 @@ export class AuthServices {
         $currentDate: { updated_at: true }
       }
     )
+  }
+
+  private async getOauthGoogleToken(code: string) {
+    const body = {
+      code,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+      grant_type: 'authorization_code'
+    }
+
+    const data = await axios.post<IResOauthGoogleToken>('https://oauth2.googleapis.com/token', body, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+
+    return data?.data
+  }
+
+  private async getGoogleUserInfo(access_token: string, id_token: string) {
+    const { data } = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+      params: {
+        access_token,
+        alt: 'json'
+      },
+      headers: {
+        Authorization: `Bearer ${id_token}`
+      }
+    })
+
+    return data as IGoogleProfile
+  }
+
+  async loginGoogle(code: string) {
+    const { access_token, refresh_token, id_token } = await this.getOauthGoogleToken(code)
+    const userInfor = await this.getGoogleUserInfo(access_token, id_token)
+
+    if (!userInfor.email) {
+      throw new ErrorWithStatus({ message: USERS_MESSAGES.GMAIL_NOT_VERIFIED, status: HttpStatus.BAD_REQUEST })
+    }
+
+    // check if user already exists
+    const user = await userServices.findByEmail(userInfor.email)
+
+    // if user exists, create tokens
+    if (user) {
+      const { access_token, refresh_token } = await this.signTokens({
+        user_id: user._id.toString(),
+        verify: user.verify
+      })
+
+      return { access_token, refresh_token, verify: user.verify }
+    }
+    // create new user if not exists
+    else {
+      const password = await hashPassword(Math.random().toString(36).slice(-8))
+
+      const { access_token, refresh_token } = await this.register({
+        name: userInfor.name,
+        email: userInfor.email,
+        password: password,
+        confirm_password: password,
+        date_of_birth: new Date().toISOString()
+      })
+
+      return { access_token, refresh_token, verify: UserVerifyStatus.Unverified }
+    }
   }
 }
 
