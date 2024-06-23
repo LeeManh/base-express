@@ -58,7 +58,7 @@ export class User {
     this.bio = user.bio || ''
     this.location = user.location || ''
     this.website = user.website || ''
-    this.username = user.username || ''
+    this.username = user.username || `user-${user._id}`
     this.avatar = user.avatar || ''
     this.cover_photo = user.cover_photo || ''
   }

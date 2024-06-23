@@ -1,9 +1,9 @@
 import { Response } from 'express'
 import { HttpStatus } from '~/constants/httpStatus'
-import { IBodyLoginUser, IBodyRegisterUser, RequestBody, TokenPayload } from '~/constants/interfaces'
+import { IBodyLoginUser, IBodyRegisterUser, RequestData, TokenPayload } from '~/constants/interfaces'
 import authServices from '~/services/auth.services'
 
-export const registerController = async (req: RequestBody<IBodyRegisterUser>, res: Response) => {
+export const registerController = async (req: RequestData<any, IBodyRegisterUser>, res: Response) => {
   const { access_token, refresh_token } = await authServices.register(req.body)
 
   return res.status(HttpStatus.CREATED).json({
@@ -15,7 +15,7 @@ export const registerController = async (req: RequestBody<IBodyRegisterUser>, re
   })
 }
 
-export const loginController = async (req: RequestBody<IBodyLoginUser>, res: Response) => {
+export const loginController = async (req: RequestData<any, IBodyLoginUser>, res: Response) => {
   const data = await authServices.login(req.body)
 
   return res.status(HttpStatus.OK).json({
@@ -24,7 +24,7 @@ export const loginController = async (req: RequestBody<IBodyLoginUser>, res: Res
   })
 }
 
-export const logoutController = async (req: RequestBody<any>, res: Response) => {
+export const logoutController = async (req: RequestData<any>, res: Response) => {
   const decoded_authorization = req.decoded_authorization as TokenPayload
 
   await authServices.logout(decoded_authorization.user_id)
@@ -34,7 +34,7 @@ export const logoutController = async (req: RequestBody<any>, res: Response) => 
   })
 }
 
-export const verifyEmailController = async (req: RequestBody<any>, res: Response) => {
+export const verifyEmailController = async (req: RequestData<any>, res: Response) => {
   const decoded_email_verification = req.decoded_email_verification as TokenPayload
 
   const data = await authServices.verifyEmail(decoded_email_verification.user_id)
@@ -45,7 +45,7 @@ export const verifyEmailController = async (req: RequestBody<any>, res: Response
   })
 }
 
-export const resendVerifyEmailController = async (req: RequestBody<any>, res: Response) => {
+export const resendVerifyEmailController = async (req: RequestData<any>, res: Response) => {
   const decoded_authorization = req.decoded_authorization as TokenPayload
 
   await authServices.resendVerifyEmail(decoded_authorization.user_id)
@@ -55,7 +55,7 @@ export const resendVerifyEmailController = async (req: RequestBody<any>, res: Re
   })
 }
 
-export const forgotPasswordController = async (req: RequestBody<any>, res: Response) => {
+export const forgotPasswordController = async (req: RequestData<any>, res: Response) => {
   await authServices.forgotPassword(req.user?._id?.toString() as string)
 
   return res.status(HttpStatus.OK).json({
@@ -63,7 +63,7 @@ export const forgotPasswordController = async (req: RequestBody<any>, res: Respo
   })
 }
 
-export const resetPasswordController = async (req: RequestBody<any>, res: Response) => {
+export const resetPasswordController = async (req: RequestData<any>, res: Response) => {
   await authServices.resetPassword({
     user_id: req.decoded_forgot_password_token?.user_id as string,
     password: req.body.password

@@ -7,7 +7,7 @@ export interface TokenPayload {
   verify: UserVerifyStatus
 }
 
-export type RequestBody<T> = Request<ParamsDictionary, any, T>
+export type RequestData<P = ParamsDictionary, T = any> = Request<P, any, T>
 
 export interface IBodyRegisterUser {
   name: string

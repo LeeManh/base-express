@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getMe, updateMe } from '~/controllers/users.controller'
+import { getMe, getProfile, updateMe } from '~/controllers/users.controller'
 import { accessTokenValidator } from '~/middlewares/auth/accessTokenValidator'
 import { verifiedUserValidator } from '~/middlewares/auth/verifiedUserValidator'
 import { updateMeValidator } from '~/middlewares/users/updateMeValidator'
@@ -27,5 +27,6 @@ usersRouter.patch(
   updateMeValidator,
   wrapRequestHandler(updateMe)
 )
+usersRouter.get('/:username', wrapRequestHandler(getProfile))
 
 export default usersRouter
