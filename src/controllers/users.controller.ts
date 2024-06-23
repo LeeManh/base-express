@@ -45,3 +45,14 @@ export const followUser = async (req: RequestData<any, IBodyFollowUser>, res: Re
     message: 'Follow user successfully'
   })
 }
+
+export const unFollowUser = async (req: RequestData<{ followed_user_id: string }>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { followed_user_id } = req.params
+
+  await userServices.unFollowUser(user_id, followed_user_id)
+
+  return res.status(HttpStatus.OK).json({
+    message: 'Unfollow user successfully'
+  })
+}

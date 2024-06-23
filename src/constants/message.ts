@@ -41,5 +41,8 @@ export const USERS_MESSAGES = {
   INVALID_USER_ID: 'Invalid user ID',
   USER_ALREADY_FOLLOWED: 'User already followed',
   FOLLOW_USER_ID_IS_REQUIRED: 'followed_user_id is required',
-  CANNOT_FOLLOW_YOURSELF: 'Cannot follow yourself'
+  CANNOT_FOLLOW_YOURSELF: 'Cannot follow yourself',
+  USER_ID_IS_REQUIRED: 'user_id is required',
+  CANNOT_UN_FOLLOW_YOURSELF: 'Cannot unfollow yourself',
+  USER_NOT_FOLLOWED: 'User not followed'
 } as const

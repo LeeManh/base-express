@@ -88,6 +88,25 @@ class UserServices {
       created_at: new Date()
     })
   }
+
+  async unFollowUser(user_id: string, followed_user_id: string) {
+    const follow = await databaseService.followers.findOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+
+    if (!follow) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOLLOWED,
+        status: HttpStatus.BAD_REQUEST
+      })
+    }
+
+    await databaseService.followers.deleteOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+  }
 }
 
 const userServices = new UserServices()
