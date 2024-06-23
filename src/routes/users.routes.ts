@@ -7,8 +7,8 @@ import { wrapRequestHandler } from '~/middlewares/errors/wrapRequestHandler'
 import { IBodyFollowUser, IBodyUpdateUser } from '~/constants/interfaces'
 import { filterMiddleware } from '~/middlewares/filterMiddleware'
 import { followValidator } from '~/middlewares/users/followValidator'
-import { unFollowValidator } from '~/middlewares/users/unfollowValidator'
 import { changePasswordValidator } from '~/middlewares/users/changePasswordValidator'
+import { unFollowValidator } from '~/middlewares/users/unFollowValidator'
 
 const usersRouter = Router()
 
