@@ -1,4 +1,8 @@
+import { Request } from 'express'
+import { HttpStatus } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
+import { ErrorWithStatus } from '~/models/Error'
+import databaseService from '~/services/database.service'
 
 const nameValidator = {
   notEmpty: {
@@ -117,6 +121,17 @@ const userNameValidator = {
       max: 50
     },
     errorMessage: USERS_MESSAGES.USERNAME_LENGTH
+  },
+  custom: {
+    options: async (value: string, { req }: { req: any }) => {
+      const user = await databaseService.users.findOne({ username: value })
+
+      if (user) {
+        throw new ErrorWithStatus({ message: USERS_MESSAGES.USERNAME_ALREADY_EXISTS, status: HttpStatus.CONFLICT })
+      }
+
+      return true
+    }
   }
 }
 
