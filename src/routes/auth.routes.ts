@@ -8,13 +8,13 @@ import {
   resetPasswordController,
   verifyEmailController
 } from '~/controllers/auth.controllers'
-import { accessTokenValidator } from '~/middlewares/auth/access-token-validator.middleware'
-import { forgotPasswordValidator } from '~/middlewares/auth/forgot-password-validator.middleware'
-import { loginValidator } from '~/middlewares/auth/login-validator.middleware'
-import { registerValidator } from '~/middlewares/auth/register-validator.middleware'
-import { resetPasswordValidator } from '~/middlewares/auth/reset-password-validator.middleware'
-import { verifyEmailValidator } from '~/middlewares/auth/verify-email-validator.middleware'
-import { wrapRequestHandler } from '~/middlewares/wrapRequestHandler'
+import { accessTokenValidator } from '~/middlewares/auth/accessTokenValidator'
+import { forgotPasswordValidator } from '~/middlewares/auth/forgotPasswordValidator'
+import { loginValidator } from '~/middlewares/auth/loginValidator'
+import { registerValidator } from '~/middlewares/auth/registerValidator'
+import { resetPasswordValidator } from '~/middlewares/auth/resetPasswordValidator'
+import { verifyEmailValidator } from '~/middlewares/auth/verifyEmailValidator'
+import { wrapRequestHandler } from '~/middlewares/errors/wrapRequestHandler'
 
 const authRouter = Router()
 
