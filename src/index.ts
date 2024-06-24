@@ -6,12 +6,14 @@ import usersRouter from './routes/users.routes'
 import { defaultErrorHandler } from './middlewares/errors/defaultErrorHandler'
 import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/files'
+import { UPLOAD_DIR } from './constants/dir'
+import staticRouter from './routes/static.routes'
 
 config()
 initFolder()
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 
 // Connect to the database
 databaseService.connect()
@@ -23,6 +25,7 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
 app.use('/medias', mediasRouter)
+app.use('/static', staticRouter)
 
 // Error handler
 app.use(defaultErrorHandler)
