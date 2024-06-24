@@ -19,6 +19,7 @@ declare global {
       EMAIL_VERIFICATION_EXPIRES_IN: string
       FORGOT_PASSWORD_SECRET: string
       FORGOT_PASSWORD_EXPIRES_IN: string
+      HOST: string
       ENV: 'test' | 'dev' | 'prod'
     }
   }
