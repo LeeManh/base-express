@@ -5,8 +5,10 @@ import authRouter from './routes/auth.routes'
 import usersRouter from './routes/users.routes'
 import { defaultErrorHandler } from './middlewares/errors/defaultErrorHandler'
 import mediasRouter from './routes/medias.routes'
+import { initFolder } from './utils/files'
 
 config()
+initFolder()
 
 const app = express()
 const port = process.env.PORT || 3000
