@@ -1,10 +1,15 @@
 import { ParamsDictionary } from 'express-serve-static-core'
 import { Request } from 'express'
-import { UserVerifyStatus } from './enum'
+import { MediaType, UserVerifyStatus } from './enum'
 
 export interface TokenPayload {
   user_id: string
   verify: UserVerifyStatus
+}
+
+export interface Media {
+  url: string
+  type: MediaType // video, image
 }
 
 export type RequestData<P = ParamsDictionary, T = any> = Request<P, any, T>

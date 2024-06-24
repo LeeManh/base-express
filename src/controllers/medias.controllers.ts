@@ -8,8 +8,8 @@ import { config } from 'dotenv'
 
 config()
 
-export const uploadSingleImageController = async (req: RequestData<any>, res: Response) => {
-  const data = await mediasServices.uploadSingleImage(req)
+export const uploadImagesController = async (req: RequestData<any>, res: Response) => {
+  const data = await mediasServices.uploadImages(req)
 
   return res.status(HttpStatus.OK).json({
     message: 'Image uploaded successfully',
