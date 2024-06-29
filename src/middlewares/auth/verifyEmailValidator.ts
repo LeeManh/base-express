@@ -1,9 +1,12 @@
+import { config } from 'dotenv'
 import { checkSchema } from 'express-validator'
 import { HttpStatus } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Error'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validate'
+
+config()
 
 export const verifyEmailValidator = validate(
   checkSchema(

@@ -6,7 +6,6 @@ import usersRouter from './routes/users.routes'
 import { defaultErrorHandler } from './middlewares/errors/defaultErrorHandler'
 import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/files'
-import { UPLOAD_DIR } from './constants/dir'
 import staticRouter from './routes/static.routes'
 
 config()
