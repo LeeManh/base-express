@@ -79,3 +79,7 @@ export interface TweetRequestBody {
   mentions: string[] // user_id[]
   medias: Media[]
 }
+
+export interface BookmarkTweetReqBody {
+  tweet_id: string
+}

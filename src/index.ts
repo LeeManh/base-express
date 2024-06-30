@@ -8,6 +8,7 @@ import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/files'
 import staticRouter from './routes/static.routes'
 import tweetsRouter from './routes/tweets.routes'
+import bookmarksRouter from './routes/bookmarks.routes'
 
 config()
 initFolder()
@@ -25,6 +26,7 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
 app.use('/tweets', tweetsRouter)
+app.use('/bookmarks', bookmarksRouter)
 app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
 
