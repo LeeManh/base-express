@@ -21,6 +21,7 @@ declare global {
       FORGOT_PASSWORD_EXPIRES_IN: string
       HOST: string
       DB_TWEETS_TABLE_NAME: string
+      DB_HASHTAGS_COLLECTION: string
       ENV: 'test' | 'dev' | 'prod'
     }
   }
