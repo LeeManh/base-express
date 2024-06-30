@@ -30,6 +30,7 @@ declare module 'express' {
     decoded_authorization?: TokenPayload
     decoded_email_verification?: TokenPayload
     decoded_forgot_password_token?: TokenPayload
+    decoded_refresh_token?: TokenPayload
     user?: User
   }
 }

@@ -4,6 +4,7 @@ import {
   loginController,
   loginGoogleController,
   logoutController,
+  refreshTokenController,
   registerController,
   resendVerifyEmailController,
   resetPasswordController,
@@ -12,6 +13,7 @@ import {
 import { accessTokenValidator } from '~/middlewares/auth/accessTokenValidator'
 import { forgotPasswordValidator } from '~/middlewares/auth/forgotPasswordValidator'
 import { loginValidator } from '~/middlewares/auth/loginValidator'
+import { refreshTokenValidator } from '~/middlewares/auth/refreshTokenValidator'
 import { registerValidator } from '~/middlewares/auth/registerValidator'
 import { resetPasswordValidator } from '~/middlewares/auth/resetPasswordValidator'
 import { verifyEmailValidator } from '~/middlewares/auth/verifyEmailValidator'
@@ -24,6 +26,7 @@ authRouter.post('/register', registerValidator, wrapRequestHandler(registerContr
 authRouter.post('/logout', accessTokenValidator, wrapRequestHandler(logoutController))
 authRouter.post('/verify-email', verifyEmailValidator, wrapRequestHandler(verifyEmailController))
 authRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
+authRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshTokenController))
 
 authRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
 authRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))

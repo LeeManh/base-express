@@ -47,5 +47,6 @@ export const USERS_MESSAGES = {
   USER_NOT_FOLLOWED: 'User not followed',
   USERNAME_ALREADY_EXISTS: 'username already exists',
   OLD_PASSWORD_IS_INCORRECT: 'Old password is incorrect',
-  GMAIL_NOT_VERIFIED: 'Gmail not verified'
+  GMAIL_NOT_VERIFIED: 'Gmail not verified',
+  REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required'
 } as const

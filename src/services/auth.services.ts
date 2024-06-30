@@ -283,6 +283,12 @@ export class AuthServices {
       return { access_token, refresh_token, verify: UserVerifyStatus.Unverified }
     }
   }
+
+  async refreshToken(user_id: string, verify: UserVerifyStatus) {
+    const { access_token, refresh_token } = await this.signTokens({ user_id, verify })
+
+    return { access_token, refresh_token }
+  }
 }
 
 const authServices = new AuthServices()

@@ -83,3 +83,17 @@ export const loginGoogleController = async (req: RequestData<any>, res: Response
 
   return res.redirect(urlRedirect)
 }
+
+export const refreshTokenController = async (req: RequestData<any>, res: Response) => {
+  const { user_id, verify } = req.decoded_refresh_token as TokenPayload
+
+  const { access_token, refresh_token } = await authServices.refreshToken(user_id, verify)
+
+  return res.status(HttpStatus.OK).json({
+    message: 'Refresh token success',
+    data: {
+      access_token,
+      refresh_token
+    }
+  })
+}
