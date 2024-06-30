@@ -7,6 +7,7 @@ import { defaultErrorHandler } from './middlewares/errors/defaultErrorHandler'
 import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/files'
 import staticRouter from './routes/static.routes'
+import tweetsRouter from './routes/tweets.routes'
 
 config()
 initFolder()
@@ -23,6 +24,7 @@ app.use(express.json())
 // Routes
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
+app.use('/tweets', tweetsRouter)
 app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
 
