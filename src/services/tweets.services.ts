@@ -20,6 +20,7 @@ class TweetsService {
         user_id: new ObjectId(user_id)
       })
     )
+
     const tweet = await databaseService.tweets.findOne({ _id: result.insertedId })
     return tweet
   }

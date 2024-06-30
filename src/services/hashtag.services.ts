@@ -19,7 +19,8 @@ class HashtagServices {
         )
       })
     )
-    return hashtagDocuments.map((hashtag) => ((hashtag as any).value as WithId<Hashtag>)._id)
+
+    return hashtagDocuments.map((hashtag) => hashtag?._id as ObjectId)
   }
 }
 
