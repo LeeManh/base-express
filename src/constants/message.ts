@@ -48,7 +48,8 @@ export const USERS_MESSAGES = {
   USERNAME_ALREADY_EXISTS: 'username already exists',
   OLD_PASSWORD_IS_INCORRECT: 'Old password is incorrect',
   GMAIL_NOT_VERIFIED: 'Gmail not verified',
-  REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required'
+  REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
+  USER_IS_BANNED: 'User is banned'
 } as const
 
 export const TWEETS_MESSAGES = {
@@ -62,7 +63,8 @@ export const TWEETS_MESSAGES = {
   MENTIONS_MUST_BE_AN_ARRAY_OF_USER_ID: 'Mentions must be an array of user id',
   MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Medias must be an array of media object',
   INVALID_TWEET_ID: 'Invalid tweet id',
-  TWEET_NOT_FOUND: 'Tweet not found'
+  TWEET_NOT_FOUND: 'Tweet not found',
+  TWEET_IS_NOT_PUBLIC: 'Tweet is not public'
 } as const
 
 export const BOOKMARK_MESSAGES = {

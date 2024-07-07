@@ -27,6 +27,7 @@ export const tweetIdValidator = validate(
                 message: TWEETS_MESSAGES.TWEET_NOT_FOUND
               })
             }
+            req.tweet = tweet
             return true
           }
         }

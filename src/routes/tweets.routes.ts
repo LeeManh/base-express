@@ -3,6 +3,7 @@ import { createTweetController, getTweetController } from '~/controllers/tweets.
 import { accessTokenValidator } from '~/middlewares/auth/accessTokenValidator'
 import { isUserLoggedInValidator } from '~/middlewares/auth/isUserLoggedInValidator'
 import { wrapRequestHandler } from '~/middlewares/errors/wrapRequestHandler'
+import { audienceValidator } from '~/middlewares/tweets/audienceValidator'
 import { createTweetValidator } from '~/middlewares/tweets/createTweetValidator'
 import { tweetIdValidator } from '~/middlewares/tweets/tweetIdValidator'
 import { verifiedUserValidator } from '~/middlewares/users/verifiedUserValidator'
@@ -22,6 +23,7 @@ tweetsRouter.get(
   tweetIdValidator,
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
+  audienceValidator,
   wrapRequestHandler(getTweetController)
 )
 
