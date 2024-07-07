@@ -5,6 +5,7 @@ import { isUserLoggedInValidator } from '~/middlewares/auth/isUserLoggedInValida
 import { wrapRequestHandler } from '~/middlewares/errors/wrapRequestHandler'
 import { audienceValidator } from '~/middlewares/tweets/audienceValidator'
 import { createTweetValidator } from '~/middlewares/tweets/createTweetValidator'
+import { getTweetChildrenValidator } from '~/middlewares/tweets/getTweetChildrenValidator'
 import { tweetIdValidator } from '~/middlewares/tweets/tweetIdValidator'
 import { verifiedUserValidator } from '~/middlewares/users/verifiedUserValidator'
 
@@ -30,6 +31,7 @@ tweetsRouter.get(
 tweetsRouter.get(
   '/:tweet_id/children',
   tweetIdValidator,
+  getTweetChildrenValidator,
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
   audienceValidator,

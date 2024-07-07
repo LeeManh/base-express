@@ -1,4 +1,4 @@
-import { ParamsDictionary } from 'express-serve-static-core'
+import { ParamsDictionary, Query } from 'express-serve-static-core'
 import { Request } from 'express'
 import { MediaType, TweetAudience, TweetType, UserVerifyStatus } from './enum'
 
@@ -12,7 +12,7 @@ export interface Media {
   type: MediaType // video, image
 }
 
-export type RequestData<P = ParamsDictionary, T = any> = Request<P, any, T>
+export type RequestData<P = ParamsDictionary, RequestBody = any> = Request<P, any, RequestBody>
 
 export interface IBodyRegisterUser {
   name: string
@@ -86,4 +86,14 @@ export interface BookmarkTweetReqBody {
 
 export interface LikeTweetReqBody {
   tweet_id: string
+}
+
+export interface TweetParam extends ParamsDictionary {
+  tweet_id: string
+}
+
+export interface TweetQuery {
+  limit: string
+  page: string
+  tweet_type: string
 }
