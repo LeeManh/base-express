@@ -16,6 +16,6 @@ export async function createTweetController(req: RequestData<any, TweetRequestBo
 export const getTweetController = async (req: RequestData<any>, res: Response) => {
   return res.json({
     message: 'Get Tweet Successfully',
-    result: 'ok'
+    result: req?.tweet
   })
 }
