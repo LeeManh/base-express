@@ -1,4 +1,5 @@
 import { Response } from 'express'
+import { TweetType } from '~/constants/enum'
 import { RequestData, TokenPayload, TweetRequestBody } from '~/constants/interfaces'
 import tweetsService from '~/services/tweets.services'
 
@@ -24,5 +25,27 @@ export const getTweetController = async (req: RequestData<any>, res: Response) =
   return res.json({
     message: 'Get Tweet Successfully',
     result: tweet
+  })
+}
+
+export const getTweetChildrenController = async (req: RequestData<any>, res: Response) => {
+  const tweet_type = Number(req.query.tweet_type as string) as TweetType
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { total, tweets } = await tweetsService.getTweetChildren({
+    tweet_id: req.params.tweet_id,
+    tweet_type,
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Get Tweet Children Successfully',
+    result: {
+      tweets,
+      tweet_type,
+      limit,
+      page,
+      total_page: Math.ceil(total / limit)
+    }
   })
 }
